@@ -41,15 +41,13 @@ export default function Blog() {
   ];
 
   return (
-    <section id="blog" className="py-20 bg-muted/30 relative">
+    <section id="blog" className="py-20 bg-background border-b border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-base font-semibold tracking-wider text-primary uppercase">Blog</h2>
-          <p className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground">
-            My Latest Tech Insights
+        <div className="text-left mb-16 border-l-4 border-brand pl-4">
+          <p className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground font-sans">
+            Technical Articles
           </p>
-          <div className="mt-4 h-1 w-12 bg-primary mx-auto rounded-full"></div>
         </div>
 
         {/* Blog Posts Grid */}
@@ -61,45 +59,45 @@ export default function Blog() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.15 }}
-              className="group flex flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm hover:shadow-md hover:border-primary/20 transition-all cursor-pointer"
+              className="group flex flex-col justify-between rounded-lg border border-border bg-card p-6 shadow-raised hover:shadow-overlay hover:border-brand/35 transition-all cursor-pointer"
             >
               <div>
                 {/* Meta details */}
                 <div className="flex items-center justify-between mb-4">
-                  <span className="inline-flex items-center rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
+                  <span className="inline-flex items-center rounded border border-border bg-brand/5 px-2 py-0.5 text-xs font-mono font-bold text-brand">
                     <BookOpen className="h-3.5 w-3.5 mr-1" />
                     {post.category}
                   </span>
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-3 text-xs font-mono text-muted-foreground">
                     <span className="flex items-center gap-1">
-                      <Calendar className="h-3.5 w-3.5" />
+                      <Calendar className="h-3.5 w-3.5 text-brand" />
                       {post.date}
                     </span>
                     <span className="flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5" />
+                      <Clock className="h-3.5 w-3.5 text-brand" />
                       {post.readTime}
                     </span>
                   </div>
                 </div>
 
                 {/* Article Title */}
-                <h3 className="text-lg font-bold text-foreground mb-3 leading-snug group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-bold text-foreground mb-3 leading-snug group-hover:text-brand transition-colors font-sans">
                   {post.title}
                 </h3>
 
                 {/* Article Summary */}
-                <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                <p className="text-sm text-muted-foreground leading-relaxed mb-6 font-sans">
                   {post.summary}
                 </p>
               </div>
 
               {/* Read button */}
-              <div className="pt-4 border-t border-border/60">
+              <div className="pt-4 border-t border-border">
                 <a
                   href={post.link}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-primary group-hover:underline cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-brand group-hover:underline cursor-pointer"
                 >
                   Read Article
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
