@@ -2,23 +2,21 @@ name: CI
 
 on:
   push:
-    branches: ['main', 'master']
+    branches: ['master']
   pull_request:
-    branches: ['main', 'master']
+    branches: ['master']
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
-    outputs:
-      success: ${{ steps.run.outputs.success }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
 
       - name: Install dependencies
@@ -31,35 +29,35 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Build
-        id: run
         run: npm run build
-        continue-on-error: false
 
   deploy:
-    needs: build
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && needs.build.result == 'success'
+    needs: build-and-test
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Install SSH client
-        run: sudo apt-get update -y && sudo apt-get install -y openssh-client rsync
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: 'npm'
 
-      - name: Setup SSH key
-        env:
-          SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H "${SERVER_HOST}" >> ~/.ssh/known_hosts
-
-      - name: Deploy via SSH
-        env:
-          SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-        run: |
-          ssh "${SERVER_USER}@${SERVER_HOST}" "cd ~/repositories/next-portfolio && git pull origin master && npm ci && npm run build && pm2 restart portfolio --update-env && pm2 list"
+      - name: Deploy to server via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_SSH_PORT || '22' }}
+          script: |
+            set -euo pipefail
+            cd /home/ubuntu/repositories/next-portfolio
+            git pull origin master
+            npm ci
+            npm run lint
+            npm run build
+            pm2 restart portfolio --update-env
+            pm2 list
