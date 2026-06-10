@@ -20,7 +20,7 @@ export default function Projects() {
 
   const projects: ProjectItem[] = [
     {
-      title: "PRD Generator",
+      title: "PRD Generator V1",
       category: "Node.js",
       description: "An automated platform that transforms raw product ideas into comprehensive, structured Product Requirement Documents (PRDs) using Gemini AI integration, backed by a PostgreSQL database.",
       tech: ["Node.js", "Express.js", "PostgreSQL", "Gemini API"],
@@ -35,7 +35,6 @@ export default function Projects() {
       description: "Designed a real-time AI API integration engine that streams structured response chunks to clients, reducing time-to-first-token latency by 70%. Implemented with Hono and Server-Sent Events.",
       tech: ["Node.js (Hono)", "Server-Sent Events", "TypeScript", "AI API Integration"],
       githubUrl: "https://github.com",
-      liveUrl: "https://github.com",
       stats: "70% Cut",
       metricLabel: "Time-to-First-Token Latency"
     },
@@ -54,7 +53,6 @@ export default function Projects() {
       description: "Created a message distribution engine managing 5,000+ active socket connections. Integrates RabbitMQ queues with Socket.io server to forward live notifications to frontend dashboards.",
       tech: ["Node.js", "Express", "RabbitMQ", "WebSockets", "Redis Cache"],
       githubUrl: "https://github.com",
-      liveUrl: "https://github.com",
       stats: "5k+",
       metricLabel: "Concurrent WebSocket Connections"
     },
