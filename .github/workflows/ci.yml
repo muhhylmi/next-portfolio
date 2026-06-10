@@ -51,8 +51,21 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy placeholder
+      - name: Trigger auto-deploy webhook
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        env:
+          WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL }}
+          WEBHOOK_SECRET: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}
         run: |
-          echo "Deploy step placeholder"
-          echo "On the server or near deployment target, copy .next + package files"
-          echo "and run: pm2 restart portfolio --update-env"
+          if [ -z "${WEBHOOK_URL}" ]; then
+            echo "DEPLOY_WEBHOOK_URL secret is not set"
+            exit 1
+          fi
+          if command -v curl >/dev/null 2>&1; then
+            curl -sS -X POST "${WEBHOOK_URL}" \
+              -H 'Content-Type: application/json' \
+              -d "$(jq -c --arg ref 'refs/heads/master' '{ref:$ref}')"
+          else
+            echo "curl is required for webhook trigger"
+            exit 1
+          fi
