@@ -59,15 +59,6 @@ export default function Projects() {
       metricLabel: "Concurrent WebSocket Connections"
     },
     {
-      title: "Potato Leaf Classifier (SVM Machine Learning)",
-      category: "ML",
-      description: "Developed an SVM-based classification pipeline extracting leaf texture, color, and shape features to detect disease states in potato crops. Academic publication reference from IEEE 2022.",
-      tech: ["Python", "OpenCV", "Scikit-Learn", "SVM Classifier", "SQLite"],
-      githubUrl: "https://github.com",
-      stats: "94.5%",
-      metricLabel: "Classification Accuracy"
-    },
-    {
       title: "ERP Document Management System Core",
       category: "Node.js",
       description: "Built the REST API and relational database schema for an enterprise ERP, CRM, and Document Management System (DMS). Includes robust access controls and revision history logging.",
@@ -111,8 +102,8 @@ export default function Projects() {
               onClick={() => setFilter(cat)}
               suppressHydrationWarning
               className={`rounded px-3 py-1.5 font-bold transition-all cursor-pointer ${filter === cat
-                  ? "bg-brand text-brand-foreground shadow-raised"
-                  : "border border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
+                ? "bg-brand text-brand-foreground shadow-raised"
+                : "border border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
             >
               {cat}
