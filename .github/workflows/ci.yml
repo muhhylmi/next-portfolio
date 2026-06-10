@@ -58,7 +58,6 @@ jobs:
           fi
 
           SSH_OPTS="-o StrictHostKeyChecking=no -o ConnectTimeout=20 -p ${SERVER_SSH_PORT}"
-          export GIT_SSH_COMMAND="ssh ${SSH_OPTS} -i <(printf '%s' '$SERVER_SSH_KEY')"
           mkdir -p ~/.ssh
           printf '%s\n' "$SERVER_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
