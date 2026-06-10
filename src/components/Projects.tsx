@@ -20,6 +20,16 @@ export default function Projects() {
 
   const projects: ProjectItem[] = [
     {
+      title: "PRD Generator",
+      category: "Node.js",
+      description: "An automated platform that transforms raw product ideas into comprehensive, structured Product Requirement Documents (PRDs) using Gemini AI integration, backed by a PostgreSQL database.",
+      tech: ["Node.js", "Express.js", "PostgreSQL", "Gemini API"],
+      githubUrl: "https://github.com/muhhylmi/prd-generator-be",
+      liveUrl: "https://prd-generator.kemitbelajar.my.id/",
+      stats: "Instant",
+      metricLabel: "PRD Document Generation"
+    },
+    {
       title: "AI Chat Streamer API (Hono & SSE)",
       category: "Node.js",
       description: "Designed a real-time AI API integration engine that streams structured response chunks to clients, reducing time-to-first-token latency by 70%. Implemented with Hono and Server-Sent Events.",
@@ -100,11 +110,10 @@ export default function Projects() {
               key={cat}
               onClick={() => setFilter(cat)}
               suppressHydrationWarning
-              className={`rounded px-3 py-1.5 font-bold transition-all cursor-pointer ${
-                filter === cat
+              className={`rounded px-3 py-1.5 font-bold transition-all cursor-pointer ${filter === cat
                   ? "bg-brand text-brand-foreground shadow-raised"
                   : "border border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
+                }`}
             >
               {cat}
             </button>
