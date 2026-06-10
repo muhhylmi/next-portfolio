@@ -30,14 +30,6 @@ export default function Blog() {
       readTime: "8 min read",
       link: "https://dev.to"
     },
-    {
-      title: "A Practical Guide to AI Streaming Outputs with Hono and Node.js",
-      summary: "Step-by-step tutorial on implementing Server-Sent Events (SSE) in Hono to stream OpenAI response chunks to client web interfaces with minimal memory overhead.",
-      category: "Node.js",
-      date: "Mar 12, 2026",
-      readTime: "5 min read",
-      link: "https://dev.to"
-    }
   ];
 
   return (
