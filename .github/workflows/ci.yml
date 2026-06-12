@@ -31,17 +31,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm ci
-      - name: Build
-        run: npm run build
       - name: Deploy to PM2 via SSH
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
@@ -62,16 +51,16 @@ jobs:
           printf '%s\n' "$SERVER_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
-          # Use full path to pm2 and ensure PATH is set
+          # Use full path to pm2 on remote server
           PM2_PATH="/home/ubuntu/.npm-global/bin/pm2"
-          CMD="
+          SSH_CMD="
             set -e
             export PATH=\"/home/ubuntu/.npm-global/bin:\$PATH\"
-            cd \"/home/ubuntu/repositories/next-portfolio\"
+            cd \"${PORTFOLIO_PATH}\"
             git pull origin master
             npm ci --no-audit --no-fund
             npm run build
-            \$PM2_PATH restart portfolio --update-env
-            \$PM2_PATH list
+            ${PM2_PATH} restart ${PORTFOLIO_PROCESS_NAME} --update-env
+            ${PM2_PATH} list
           "
-          ssh ${SSH_OPTS} -i ~/.ssh/deploy_key "${SERVER_USER}@${SERVER_HOST}" "PM2_PATH=${PM2_PATH} bash -c \"${CMD}\""
+          ssh ${SSH_OPTS} -i ~/.ssh/deploy_key "${SERVER_USER}@${SERVER_HOST}" "${SSH_CMD}"
