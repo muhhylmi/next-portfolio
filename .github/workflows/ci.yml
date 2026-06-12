@@ -62,13 +62,16 @@ jobs:
           printf '%s\n' "$SERVER_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
-          ssh ${SSH_OPTS} -i ~/.ssh/deploy_key "${SERVER_USER}@${SERVER_HOST}" << 'EOSSH'
-          set -e
-          export PATH="/home/ubuntu/.npm-global/bin:$PATH"
-          cd "/home/ubuntu/repositories/next-portfolio"
-          git pull origin master
-          npm ci --no-audit --no-fund
-          npm run build
-          pm2 restart portfolio --update-env
-          pm2 list
-          EOSSH
+          # Use full path to pm2 and ensure PATH is set
+          PM2_PATH="/home/ubuntu/.npm-global/bin/pm2"
+          CMD="
+            set -e
+            export PATH=\"/home/ubuntu/.npm-global/bin:\$PATH\"
+            cd \"/home/ubuntu/repositories/next-portfolio\"
+            git pull origin master
+            npm ci --no-audit --no-fund
+            npm run build
+            \$PM2_PATH restart portfolio --update-env
+            \$PM2_PATH list
+          "
+          ssh ${SSH_OPTS} -i ~/.ssh/deploy_key "${SERVER_USER}@${SERVER_HOST}" "PM2_PATH=${PM2_PATH} bash -c \"${CMD}\""
