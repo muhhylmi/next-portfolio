@@ -45,22 +45,18 @@ jobs:
             echo "Missing SERVER_HOST/SERVER_USER/SERVER_SSH_KEY secrets"
             exit 1
           fi
-
           SSH_OPTS="-o StrictHostKeyChecking=no -o ConnectTimeout=20 -p ${SERVER_SSH_PORT}"
           mkdir -p ~/.ssh
           printf '%s\n' "$SERVER_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-
-          # Use full path to pm2 on remote server
           PM2_PATH="/home/ubuntu/.npm-global/bin/pm2"
-          SSH_CMD="
+          ssh ${SSH_OPTS} -i ~/.ssh/deploy_key "${SERVER_USER}@${SERVER_HOST}" '
             set -e
-            export PATH=\"/home/ubuntu/.npm-global/bin:\$PATH\"
-            cd \"${PORTFOLIO_PATH}\"
+            export PATH="/home/ubuntu/.npm-global/bin:$PATH"
+            cd '"${PORTFOLIO_PATH}"'
             git pull origin master
             npm ci --no-audit --no-fund
             npm run build
-            ${PM2_PATH} restart ${PORTFOLIO_PROCESS_NAME} --update-env
-            ${PM2_PATH} list
-          "
-          ssh ${SSH_OPTS} -i ~/.ssh/deploy_key "${SERVER_USER}@${SERVER_HOST}" "${SSH_CMD}"
+            '"${PM2_PATH}"' restart '"${PORTFOLIO_PROCESS_NAME}"' --update-env
+            '"${PM2_PATH}"' list
+          '
