@@ -12,17 +12,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: 'npm'
+
       - name: Install dependencies
         run: npm ci
+
       - name: Lint
-        run: npm run lint || true
+        run: npm run lint
+
       - name: Typecheck
         run: npx tsc --noEmit
+
       - name: Build
         run: npm run build
 
@@ -50,13 +55,13 @@ jobs:
           printf '%s\n' "$SERVER_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           PM2_PATH="/home/ubuntu/.npm-global/bin/pm2"
-          ssh ${SSH_OPTS} -i ~/.ssh/deploy_key "${SERVER_USER}@${SERVER_HOST}" '
+          ssh ${SSH_OPTS} -i ~/.ssh/deploy_key "${SERVER_USER}@${SERVER_HOST}" "
             set -e
-            export PATH="/home/ubuntu/.npm-global/bin:$PATH"
-            cd '"${PORTFOLIO_PATH}"'
+            export PATH=\"/home/ubuntu/.npm-global/bin:\$PATH\"
+            cd '${PORTFOLIO_PATH}'
             git pull origin master
             npm ci --no-audit --no-fund
             npm run build
-            '"${PM2_PATH}"' restart '"${PORTFOLIO_PROCESS_NAME}"' --update-env
-            '"${PM2_PATH}"' list
-          '
+            '${PM2_PATH}' restart '${PORTFOLIO_PROCESS_NAME}' --update-env
+            '${PM2_PATH}' list
+          "
