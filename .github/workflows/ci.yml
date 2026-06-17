@@ -54,14 +54,7 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s\n' "$SERVER_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          PM2_PATH="/home/ubuntu/.npm-global/bin/pm2"
-          ssh ${SSH_OPTS} -i ~/.ssh/deploy_key "${SERVER_USER}@${SERVER_HOST}" "
-            set -e
-            export PATH=\"/home/ubuntu/.npm-global/bin:\$PATH\"
-            cd '${PORTFOLIO_PATH}'
-            git pull origin master
-            npm ci --no-audit --no-fund
-            npm run build
-            '${PM2_PATH}' restart '${PORTFOLIO_PROCESS_NAME}' --update-env
-            '${PM2_PATH}' list
-          "
+          
+          # Create deploy script on remote server
+          ssh ${SSH_OPTS} -i ~/.ssh/deploy_key "${SERVER_USER}@${SERVER_HOST}" \
+            "set -e; export PATH=\"/home/ubuntu/.npm-global/bin:\$PATH\"; cd '/home/ubuntu/repositories/next-portfolio'; git pull origin master; npm ci --no-audit --no-fund; npm run build; pm2 restart 'portfolio' --update-env; pm2 list"
