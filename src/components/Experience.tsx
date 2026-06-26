@@ -64,13 +64,19 @@ export default function Experience() {
   ];
 
   return (
-    <section id="experience" className="py-20 bg-background border-b border-border">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="experience" className="py-24 bg-background relative overflow-hidden border-b border-border">
+      {/* Background mesh glows */}
+      <div className="bg-mesh-glow absolute bottom-1/3 right-1/4 h-80 w-80 bg-brand/10"></div>
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Heading */}
-        <div className="text-left mb-16 border-l-4 border-brand pl-4">
-          <p className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground font-sans">
+        <div className="text-left mb-16">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-brand/5 px-3.5 py-1 text-[10px] uppercase tracking-[0.2em] font-bold text-brand mb-3">
+            Journey
+          </div>
+          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground font-sans">
             Work Experience
-          </p>
+          </h2>
         </div>
 
         {/* Timeline container */}
@@ -81,57 +87,59 @@ export default function Experience() {
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
-              className="relative pl-8 md:pl-12"
+              transition={{ duration: 0.8, delay: index * 0.15, ease: [0.32, 0.72, 0, 1] }}
+              className="relative pl-8 md:pl-12 hover-card-trigger"
             >
               {/* Timeline marker node */}
-              <div className="absolute -left-[17px] top-1.5 flex h-8 w-8 items-center justify-center rounded-full border border-border bg-card text-[#E2A612] dark:text-brand shadow-raised">
-                <Briefcase className="h-4 w-4" />
+              <div className="absolute -left-[21px] top-1.5 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-brand shadow-raised z-10 transition-transform duration-300 group-hover:scale-110">
+                <Briefcase className="h-4.5 w-4.5" />
               </div>
 
-              {/* Experience Card */}
-              <div className="group rounded-lg border border-border bg-card p-6 shadow-raised hover:shadow-overlay hover:border-brand/35 transition-all">
-                {/* Header Information */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-border pb-4 mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-foreground group-hover:text-brand transition-colors font-sans">
-                      {exp.role}
-                    </h3>
-                    <p className="text-sm font-semibold text-brand mt-0.5 font-sans">{exp.company}</p>
+              {/* Experience Card (Double-Bezel) */}
+              <div className="double-bezel-outer">
+                <div className="double-bezel-inner p-6 md:p-8">
+                  {/* Header Information */}
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-border pb-5 mb-5">
+                    <div>
+                      <h3 className="text-xl font-bold text-foreground font-sans">
+                        {exp.role}
+                      </h3>
+                      <p className="text-sm font-bold text-brand mt-1 font-sans">{exp.company}</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 sm:items-center text-xs font-mono font-bold text-muted-foreground">
+                      <span className="flex items-center gap-1.5">
+                        <Calendar className="h-3.5 w-3.5 text-brand" />
+                        {exp.period}
+                      </span>
+                      <span className="hidden sm:inline text-border">|</span>
+                      <span className="flex items-center gap-1.5">
+                        <MapPin className="h-3.5 w-3.5 text-brand" />
+                        {exp.location}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-2 sm:items-center text-xs font-mono font-bold text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="h-3.5 w-3.5 text-brand" />
-                      {exp.period}
-                    </span>
-                    <span className="hidden sm:inline text-border">|</span>
-                    <span className="flex items-center gap-1">
-                      <MapPin className="h-3.5 w-3.5 text-brand" />
-                      {exp.location}
-                    </span>
+
+                  {/* Highlights List */}
+                  <ul className="space-y-3.5 list-disc pl-5 text-sm text-muted-foreground leading-relaxed font-sans">
+                    {exp.highlights.map((bullet, bulletIdx) => (
+                      <li key={bulletIdx} className="marker:text-brand">
+                        {bullet}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Tech tags used */}
+                  <div className="flex flex-wrap gap-2 pt-6">
+                    {exp.techStack.map((tech, techIdx) => (
+                      <span
+                        key={techIdx}
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-muted/30 px-3 py-1.5 text-xs font-mono font-bold text-muted-foreground transition-colors hover:border-brand/40 hover:text-brand"
+                      >
+                        <Tag className="h-3 w-3 text-brand" />
+                        {tech}
+                      </span>
+                    ))}
                   </div>
-                </div>
-
-                {/* Highlights List */}
-                <ul className="space-y-3 list-disc pl-5 text-sm text-muted-foreground leading-relaxed font-sans">
-                  {exp.highlights.map((bullet, bulletIdx) => (
-                    <li key={bulletIdx} className="marker:text-brand">
-                      {bullet}
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Tech tags used */}
-                <div className="flex flex-wrap gap-2 pt-6">
-                  {exp.techStack.map((tech, techIdx) => (
-                    <span
-                      key={techIdx}
-                      className="inline-flex items-center gap-1.5 rounded border border-border bg-muted px-2.5 py-1 text-xs font-mono font-bold text-muted-foreground transition-colors hover:border-brand/20 hover:text-brand"
-                    >
-                      <Tag className="h-3 w-3 text-brand" />
-                      {tech}
-                    </span>
-                  ))}
                 </div>
               </div>
             </motion.div>
