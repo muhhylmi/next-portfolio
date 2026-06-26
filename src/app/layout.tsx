@@ -36,6 +36,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <div className="noise-overlay" />
           {children}
         </ThemeProvider>
       </body>

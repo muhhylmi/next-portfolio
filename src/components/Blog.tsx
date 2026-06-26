@@ -41,13 +41,19 @@ export default function Blog() {
   ];
 
   return (
-    <section id="blog" className="py-20 bg-background border-b border-border">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="blog" className="py-24 bg-background relative overflow-hidden border-b border-border">
+      {/* Background gradients */}
+      <div className="bg-mesh-glow absolute top-1/3 left-1/4 h-80 w-80 bg-accent-purple/10"></div>
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Heading */}
-        <div className="text-left mb-16 border-l-4 border-brand pl-4">
-          <p className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground font-sans">
+        <div className="text-left mb-16">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-brand/5 px-3.5 py-1 text-[10px] uppercase tracking-[0.2em] font-bold text-brand mb-3">
+            Insights Feed
+          </div>
+          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground font-sans">
             Technical Articles
-          </p>
+          </h2>
         </div>
 
         {/* Blog Posts Grid */}
@@ -58,50 +64,54 @@ export default function Blog() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-              className="group flex flex-col justify-between rounded-lg border border-border bg-card p-6 shadow-raised hover:shadow-overlay hover:border-brand/35 transition-all cursor-pointer"
+              transition={{ duration: 0.8, delay: index * 0.15, ease: [0.32, 0.72, 0, 1] }}
+              className="hover-card-trigger flex flex-col justify-between cursor-pointer"
             >
-              <div>
-                {/* Meta details */}
-                <div className="flex items-center justify-between mb-4">
-                  <span className="inline-flex items-center rounded border border-border bg-brand/5 px-2 py-0.5 text-xs font-mono font-bold text-brand">
-                    <BookOpen className="h-3.5 w-3.5 mr-1" />
-                    {post.category}
-                  </span>
-                  <div className="flex items-center gap-3 text-xs font-mono text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="h-3.5 w-3.5 text-brand" />
-                      {post.date}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5 text-brand" />
-                      {post.readTime}
-                    </span>
+              <div className="double-bezel-outer h-full flex flex-col">
+                <div className="double-bezel-inner p-6 flex flex-col justify-between flex-grow">
+                  <div>
+                    {/* Meta details */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-4 border-b border-border">
+                      <span className="inline-flex items-center rounded-xl bg-brand/10 px-3 py-1 text-xs font-mono font-bold text-brand border border-brand/15 w-max">
+                        <BookOpen className="h-3.5 w-3.5 mr-1.5" />
+                        {post.category}
+                      </span>
+                      <div className="flex items-center gap-3.5 text-xs font-mono text-muted-foreground">
+                        <span className="flex items-center gap-1.5">
+                          <Calendar className="h-3.5 w-3.5 text-brand" />
+                          {post.date}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <Clock className="h-3.5 w-3.5 text-brand" />
+                          {post.readTime}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Article Title */}
+                    <h3 className="text-lg font-bold text-foreground mb-3 leading-snug font-sans transition-colors group-hover:text-brand">
+                      {post.title}
+                    </h3>
+
+                    {/* Article Summary */}
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-6 font-sans">
+                      {post.summary}
+                    </p>
+                  </div>
+
+                  {/* Read button */}
+                  <div className="pt-4 border-t border-border mt-auto">
+                    <a
+                      href={post.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group inline-flex items-center gap-1.5 text-xs font-mono font-bold text-brand hover:text-brand/80 cursor-pointer"
+                    >
+                      <span>Read Article</span>
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    </a>
                   </div>
                 </div>
-
-                {/* Article Title */}
-                <h3 className="text-lg font-bold text-foreground mb-3 leading-snug group-hover:text-brand transition-colors font-sans">
-                  {post.title}
-                </h3>
-
-                {/* Article Summary */}
-                <p className="text-sm text-muted-foreground leading-relaxed mb-6 font-sans">
-                  {post.summary}
-                </p>
-              </div>
-
-              {/* Read button */}
-              <div className="pt-4 border-t border-border">
-                <a
-                  href={post.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-brand group-hover:underline cursor-pointer"
-                >
-                  Read Article
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </a>
               </div>
             </motion.article>
           ))}

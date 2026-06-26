@@ -7,7 +7,7 @@ import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
 import Blog from "@/components/Blog";
 import Contact from "@/components/Contact";
-import { Terminal, Heart } from "lucide-react";
+import { Terminal } from "lucide-react";
 
 export default function Home() {
   return (

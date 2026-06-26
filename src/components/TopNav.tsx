@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
-import { Sun, Moon, Menu, X, Github, Linkedin, Mail, Home } from "lucide-react";
-import { HedgehogMascot } from "./Sidebar";
+import { Sun, Moon, Github, Linkedin, Mail } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
@@ -53,42 +52,36 @@ export default function TopNav() {
   }, []);
 
   if (!mounted) return null;
-
-  // Map active section to dashboard-like path name
-  const getSectionLabel = () => {
-    switch (activeSection) {
-      case "about":
-        return "About Me";
-      case "skills":
-        return "Capabilities";
-      case "experience":
-        return "Work History";
-      case "projects":
-        return "Architectures";
-      case "blog":
-        return "Insights Feed";
-      case "contact":
-        return "Telemetry Connection";
-      default:
-        return "System Overview";
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+      }
     }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 300, damping: 24 } }
   };
 
   return (
     <>
-      <header className="sticky top-0 z-40 flex h-12 w-full items-center justify-between border-b border-border bg-card px-4 shadow-flat">
+      <header className="sticky top-4 mx-4 z-40 flex h-14 items-center justify-between border border-border bg-card/65 backdrop-blur-xl px-5 shadow-raised rounded-full transition-all duration-300">
         {/* Left Side: SaaS-style Breadcrumbs & Hamburger */}
         <div className="flex items-center gap-3">
           {/* Mobile hamburger button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden rounded-md p-1 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer focus:outline-none"
+            className="md:hidden relative w-5 h-5 flex flex-col justify-between items-center cursor-pointer focus:outline-none z-50 p-[2px]"
             aria-label="Toggle Mobile Menu"
           >
-            <Menu className="h-5 w-5" />
+            <span className={`w-5 h-[2px] bg-foreground rounded-full transition-all duration-300 origin-center ${isOpen ? "rotate-45 translate-y-[6.5px]" : ""}`} />
+            <span className={`w-5 h-[2px] bg-foreground rounded-full transition-all duration-300 ${isOpen ? "opacity-0" : ""}`} />
+            <span className={`w-5 h-[2px] bg-foreground rounded-full transition-all duration-300 origin-center ${isOpen ? "-rotate-45 -translate-y-[6.5px]" : ""}`} />
           </button>
-
-          {/* Breadcrumbs path removed */}
         </div>
 
         {/* Right Side: Theme Toggle & Social Quicklinks */}
@@ -99,7 +92,7 @@ export default function TopNav() {
               href="https://github.com"
               target="_blank"
               rel="noreferrer"
-              className="rounded-md p-1 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              className="rounded-xl p-1.5 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               title="GitHub"
             >
               <Github className="h-4.5 w-4.5" />
@@ -108,14 +101,14 @@ export default function TopNav() {
               href="https://linkedin.com"
               target="_blank"
               rel="noreferrer"
-              className="rounded-md p-1 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              className="rounded-xl p-1.5 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               title="LinkedIn"
             >
               <Linkedin className="h-4.5 w-4.5" />
             </a>
             <a
               href="mailto:hylmi.muh@gmail.com"
-              className="rounded-md p-1 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              className="rounded-xl p-1.5 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               title="Email"
             >
               <Mail className="h-4.5 w-4.5" />
@@ -125,13 +118,13 @@ export default function TopNav() {
           {/* Theme Toggler */}
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="rounded-md p-1 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer focus:outline-none transition-colors"
+            className="rounded-xl p-1.5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer focus:outline-none transition-colors"
             aria-label="Toggle Theme"
           >
             {theme === "dark" ? (
-              <Sun className="h-4.5 w-4.5 text-[#F9BD2B]" />
+              <Sun className="h-4.5 w-4.5 text-brand" />
             ) : (
-              <Moon className="h-4.5 w-4.5 text-[#F9BD2B]" />
+              <Moon className="h-4.5 w-4.5 text-brand" />
             )}
           </button>
         </div>
@@ -144,66 +137,66 @@ export default function TopNav() {
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
+              animate={{ opacity: 0.6 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="md:hidden fixed inset-0 z-45 bg-black"
+              className="md:hidden fixed inset-0 z-45 bg-black/60 backdrop-blur-sm"
             />
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="md:hidden fixed top-0 bottom-0 left-0 w-64 z-50 bg-white text-[#1D1D1D] border-r border-border dark:bg-[#1D1D1D] dark:text-[#EEEFE9] dark:border-[#2D2D2D] p-5 flex flex-col justify-between"
+              className="md:hidden fixed top-0 bottom-0 left-0 w-72 z-50 bg-background/95 backdrop-blur-xl text-foreground border-r border-border p-6 flex flex-col justify-between shadow-modal"
             >
               <div>
                 {/* Header */}
-                <div className="flex items-center justify-between border-b border-border dark:border-[#2D2D2D] pb-4 mb-6">
+                <div className="flex items-center justify-between border-b border-border pb-5 mb-8">
                   <div className="flex items-center gap-2">
                     <span className="font-sans font-bold text-sm text-foreground">
-                      hylmi<span className="text-[#F9BD2B]">.dev</span>
+                      hylmi<span className="text-brand">.dev</span>
                     </span>
                   </div>
-                  <button
-                    onClick={() => setIsOpen(false)}
-                    className="rounded-md p-1.5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
                 </div>
 
                 {/* Nav Links */}
-                <nav className="flex flex-col gap-2">
+                <motion.nav
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="show"
+                  className="flex flex-col gap-2.5"
+                >
                   {navItems.map((item) => {
                     const isActive = activeSection === item.href.slice(1);
                     return (
-                      <a
+                      <motion.a
                         key={item.name}
+                        variants={itemVariants}
                         href={item.href}
                         onClick={() => setIsOpen(false)}
-                        className={`px-3 py-2.5 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+                        className={`px-4 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 cursor-pointer border ${
                           isActive
-                            ? "bg-[#F9BD2B] text-[#1D1D1D]"
-                            : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                            ? "bg-brand/10 text-brand border-brand/20 shadow-[0_0_15px_rgba(0,240,255,0.08)]"
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted/40 border-transparent"
                         }`}
                       >
                         {item.name}
-                      </a>
+                      </motion.a>
                     );
                   })}
-                </nav>
+                </motion.nav>
               </div>
 
               {/* Mobile Drawer Footer */}
-              <div className="border-t border-border dark:border-[#2D2D2D] pt-4">
+              <div className="border-t border-border pt-5">
                 <div className="flex items-center justify-around text-muted-foreground">
-                  <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-foreground cursor-pointer">
+                  <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-foreground hover:scale-105 transition-transform cursor-pointer">
                     <Github className="h-5 w-5" />
                   </a>
-                  <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-foreground cursor-pointer">
+                  <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-foreground hover:scale-105 transition-transform cursor-pointer">
                     <Linkedin className="h-5 w-5" />
                   </a>
-                  <a href="mailto:hylmi.muh@gmail.com" className="hover:text-foreground cursor-pointer">
+                  <a href="mailto:hylmi.muh@gmail.com" className="hover:text-foreground hover:scale-105 transition-transform cursor-pointer">
                     <Mail className="h-5 w-5" />
                   </a>
                 </div>
